@@ -58,3 +58,13 @@ $message-body-padding: .75em 1em;
    background-color: #d0d1cd;
    padding: 25px;
  }
+
+ .stick-to-bottom {
+  top: initial !important;
+  bottom: 0;
+}
+
+.full-height{
+  min-height: 100%;
+  min-height: 100vh
+}

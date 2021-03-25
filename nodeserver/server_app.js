@@ -42,7 +42,6 @@ io.on("connection", (socket) => {
     const index = users.indexOf(socket.username);
     if (index > -1) {
       users.splice(index, 1);
-      console.log(users)
     }
     const usernames = JSON.stringify(users)
     // Tell everyone that a user disconnected

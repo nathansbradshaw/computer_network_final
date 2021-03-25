@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react'
+import Sticky from 'react-stickynode';
 import Nav from './components/nav'
 import './app.scss'
 // import socketClient from "socket.io-client";
@@ -9,6 +10,7 @@ const App = () => {
 
   // Run when the UI has loaded
   useEffect(() => {
+    // Get Dom Elements
     const chat = document.getElementById('chat-submit')
     const chatEnter = document.getElementById('chat_enter')
     const changeusername = document.getElementById('username-submit')
@@ -18,19 +20,14 @@ const App = () => {
 
 
     // ------------------------------------------------ Sending chat message
-
     const sendMessage = (event) => {
-      // if(event !== 'undefined')
-      // event.preventDefault();
       socket.emit('chat', Input.value, (ack) => {
-        console.log("username: " + ack.username); // ok
         username = ack.username;
-        // console.log(username)
       })
-
       console.log(Input.value)
       Input.value = ''
     }
+    // Send chat if enter was pressed
     Input.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         event.preventDefault();
@@ -38,14 +35,15 @@ const App = () => {
       }
     });
 
+    // ------------------------------------------------ Display list of users
     const usersList = (usernames) => {
-      userList.innerHTML = `<h2 class='has-text-white'> Connected Users </h2>`
+      userList.innerHTML = `<h2 class='has-text-white is-size-3'> Connected Users </h2> <hr/>`
       usernames.forEach(element => {
         if (element === username) {
-          userList.innerHTML += `<p class='has-text-white'> (${element}) - YOU </p>`
+          userList.innerHTML += `<p class='has-text-white'> ≪${element}≫ </p>`
 
         } else {
-          userList.innerHTML += `<p class='has-text-white'> ${element} </p>`
+          userList.innerHTML += `<p class='has-text-grey-light'> ${element} </p>`
         }
 
       });
@@ -79,7 +77,7 @@ const App = () => {
     // ------------------------------------------------- Display name changes
     socket.on('change username report', (message, users) => {
       let usersArray = JSON.parse(users);
-     usersList(usersArray);
+      usersList(usersArray);
       chatwindow.innerHTML += `
           <div class="is-flex is-align-content-center is-justify-content-center my-1">
           <div class="is-align-center">
@@ -90,7 +88,7 @@ const App = () => {
     // ------------------------------------------------- TEll users of new connections
     socket.on('connection to chat', (username, users) => {
       let usersArray = JSON.parse(users);
-     usersList(usersArray);
+      usersList(usersArray);
       chatwindow.innerHTML += `
       <div class="is-flex is-align-content-center is-justify-content-center my-1">
       <div class="is-align-center">
@@ -137,19 +135,27 @@ const App = () => {
     [])
   //In my school we had hardly any tech related courses but I found a lot of joy in creating things with programming so I taught 
   return (
-    <div id="container is-max-desktop site">
+    <div id="container full-height">
       <Nav />
-      <div className='mt-3 container ' id="chatSection">
-        <div class="tile is-ancestor">
-          <div class="tile is-10 is-vertical is-parent" id="chat-window">
-
+      <div className='my-3 full-height' id="chatSection">
+        <div class="columns is-centered full-height is-mobile mb-6">
+          <div class="column has-background-info is-hidden-touch is-one-quarter">
 
           </div>
-          <div class="tile is-4 is-parent has-background-info">
+          <div class="column mx-4 mb-6">
+            <div class="container is-fullhd mb-6" id="chat-window">
+              {/*OUR CHAT WILL POPULATE  */}
+            </div>
+          </div>
 
-            <div className="mx-6 site-content content-window" id="user-list"></div>
+          <div class="column is-one-quarter has-background-info ">
+            <Sticky>
+              <div className="mx-6 site-content content-window" id="user-list"></div>
+            </Sticky>
           </div>
         </div>
+
+        {/* ---------------------Chat footer------------------------------- */}
         <div className='footer1'>
           <div className="field is-horizontal  mt-4 ">
             <div className="field-label is-normal">
@@ -165,7 +171,6 @@ const App = () => {
                   <input className='button is-info' type="submit " id="chat-submit" value="enter" />
                   <input className='button' type="submit" id="username-submit" value="change Username" />
                 </div>
-
               </div>
             </div>
           </div>
