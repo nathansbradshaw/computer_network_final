@@ -35,3 +35,26 @@ $message-body-padding: .75em 1em;
 .hidden-button{
    display: none;
 }
+
+.Site {
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+ }
+ 
+ .Site-content {
+   flex: 1;
+ }
+
+ .content-window {
+    margin-bottom: 135px;
+ }
+ .footer1 {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   text-align: center;
+   background-color: #d0d1cd;
+   padding: 25px;
+ }
